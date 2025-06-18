@@ -38,9 +38,6 @@ The pipeline consists of 5 modular scripts that can be run independently or in s
 ```bash
 # Using uv (recommended)
 uv sync
-
-# Or using pip
-pip install -r requirements.txt
 ```
 
 ## Configuration
