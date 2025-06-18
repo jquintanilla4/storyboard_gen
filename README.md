@@ -20,9 +20,9 @@ The pipeline consists of 5 modular scripts that can be run independently or in s
 
 1. **`script2shots.py`** - Convert film scripts to detailed shot lists
 2. **`shots2prompts.py`** - Generate cinematic image prompts from shot lists
-3. **`prompts2images.py`** - Generate images from prompts (TODO: RunwayML integration)
-4. **`prompts2tables.py`** - Convert image prompts to structured CSV tables
-5. **`tables_consolidate.py`** - Consolidate multiple CSV files into one dataset
+3. **`prompts2tables.py`** - Convert image prompts to structured CSV tables
+4. **`tables_consolidate.py`** - Consolidate multiple CSV files into one dataset
+5. **`table2images.py`** - Generate images from prompts in a csv (TODO: RunwayML integration)
 
 ## Prerequisites
 
@@ -131,7 +131,7 @@ python tables_consolidate.py
 storyboard_gen/
 ├── script2shots.py           # Script → Shot Lists
 ├── shots2prompts.py          # Shot Lists → Image Prompts  
-├── prompts2images.py         # Prompts → Images (TODO)
+├── table2images.py         # Prompts → Images (TODO)
 ├── prompts2tables.py         # Prompts → CSV Tables
 ├── tables_consolidate.py     # Consolidate CSV Files
 ├── text_files/              # Working directory
