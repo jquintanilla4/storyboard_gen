@@ -1,0 +1,24 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment variables
+.env
+
+# Input and output files
+text_files/shot_lists/*
+text_files/script_chunks/*
+text_files/image_prompts/*
+text_files/scripts/*
+text_files/image_prompts_tables/*
+text_files/characters.txt
+
+# MacOS specific files
+.DS_Store

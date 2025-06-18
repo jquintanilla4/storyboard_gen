@@ -1,0 +1,14 @@
+[project]
+name = "storyboard-gen"
+version = "0.1.0"
+description = "Convert film scripts to shot lists using Google Gemini API"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "google-genai>=1.20.0",
+    "python-dotenv>=1.1.0",
+    "inquirer>=3.3.0",
+    "striprtf>=0.0.29",
+    "pathlib",
+    "pandas>=2.0.0",
+]
