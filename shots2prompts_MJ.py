@@ -70,10 +70,10 @@ Guidelines for Midjourney prompts:
 Format the output as numbered prompts corresponding to each shot:
 
 SCENE 1 - SHOT 1A: KITCHEN - MORNING 1999
-Imagen Prompt: "Cvast desert highway at golden hour, ultra-wide 40 mm anamorphic lens flare, dust in the air, warm back-light, inspired by Roger Deakins and “No Country for Old Men”, high-contrast realism —-ar 21:9"
+Image Prompt: "Cvast desert highway at golden hour, ultra-wide 40 mm anamorphic lens flare, dust in the air, warm back-light, inspired by Roger Deakins and No Country for Old Men, high-contrast realism —-ar 21:9"
 
 SCENE 1 - SHOT 1B: KITCHEN - MORNING 1999
-Imagen Prompt: "Cinematic close-up portrait of a strikingly beautiful, fashionable young woman wearing cool, stylish sunglasses. She looks directly at the viewer with a captivating, confident gaze. Her lips are the focal point, coated in a high-shine, luscious lip gloss, making them look incredibly shiny, plump, and invitingly ‘tasty’. Soft, glamorous studio lighting that catches the gloss, shallow depth of field. --ar 21:9"
+Image Prompt: "Cinematic close-up portrait of a strikingly beautiful, fashionable young woman wearing cool, stylish sunglasses. She looks directly at the viewer with a captivating, confident gaze. Her lips are the focal point, coated in a high-shine, luscious lip gloss, making them look incredibly shiny, plump, and invitingly tasty. Soft, glamorous studio lighting that catches the gloss, shallow depth of field. --ar 21:9"
 
 Convert the following shot list:
 """
