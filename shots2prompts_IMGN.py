@@ -43,7 +43,7 @@ For each shot in the shot list, create a comprehensive Imagen prompt that includ
 
 Guidelines for Imagen prompts:
 - **Core Prompting Formula:** Use the format: `[Subject]`, `[Style]`, `[Setting]`, `[Lighting/Camera Modifiers]`. Be specific and descriptive for the best results.
-  - **Example of a strong, detailed prompt:** "A hyperrealistic, highly detailed photograph, medium close-up shot of an elderly sailor with a weathered face, a thick white beard, and deep-set, thoughtful eyes, wearing a heavy navy blue wool sweater. He is on the deck of a wooden ship, bracing against the wind during a storm. The setting is a tumultuous sea with massive, churning waves crashing against the hull under dark, dramatic storm clouds. The lighting is Rembrandt-style side lighting, casting strong shadows and highlighting the texture of his skin, sharp focus."
+- **Example of a strong, detailed prompt:** "A hyperrealistic, highly detailed photograph, medium close-up shot of an elderly sailor with a weathered face, a thick white beard, and deep-set, thoughtful eyes, wearing a heavy navy blue wool sweater. He is on the deck of a wooden ship, bracing against the wind during a storm. The setting is a tumultuous sea with massive, churning waves crashing against the hull under dark, dramatic storm clouds. The lighting is Rembrandt-style side lighting, casting strong shadows and highlighting the texture of his skin, sharp focus."
 
 - Be specific about visual details, lighting, and composition.
 - The prompts should be in photorealism cinematic style with high contrast and cinematic lighting.
