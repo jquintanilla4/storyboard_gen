@@ -16,13 +16,14 @@ A comprehensive Python pipeline that converts film scripts into detailed shot li
 
 ## Pipeline Overview
 
-The pipeline consists of 5 modular scripts that can be run independently or in sequence:
+The pipeline consists of 6 modular scripts that can be run independently or in sequence:
 
 1. **`script2shots.py`** - Convert film scripts to detailed shot lists
-2. **`shots2prompts.py`** - Generate cinematic image prompts from shot lists
-3. **`prompts2tables.py`** - Convert image prompts to structured CSV tables
-4. **`tables_consolidate.py`** - Consolidate multiple CSV files into one dataset
-5. **`table2images.py`** - Generate images from prompts in a csv (TODO: RunwayML integration)
+2. **`shots2prompts_IMGN.py`** - Generate cinematic image prompts from shot lists (Google Imagen format)
+3. **`shots2prompts_MJ.py`** - Generate cinematic image prompts from shot lists (Midjourney format)
+4. **`prompts2tables.py`** - Convert image prompts to structured CSV tables
+5. **`tables_consolidate.py`** - Consolidate multiple CSV files into one dataset
+6. **`table2images.py`** - Generate images from prompts in a csv (TODO: RunwayML integration)
 
 ## Prerequisites
 
@@ -81,17 +82,36 @@ python script2shots.py
 
 ### Step 2: Shot Lists to Image Prompts
 
-Generate cinematic image prompts from shot lists:
+Generate cinematic image prompts from shot lists. Choose between two specialized versions:
 
+#### Option A: Google Imagen Format
 ```bash
-python shots2prompts.py
+python shots2prompts_IMGN.py
 ```
 
 **Features:**
+- Optimized for Google's Imagen AI image generator
+- Detailed photorealistic prompts with technical photography specifications
+- Uses comprehensive descriptive format for high-quality cinematic results
+- Includes aspect ratio suggestions and film grain effects
+
+#### Option B: Midjourney Format
+```bash
+python shots2prompts_MJ.py
+```
+
+**Features:**
+- Optimized for Midjourney AI image generator
+- Structured prompt format with specific Midjourney parameters
+- Uses cinematic 21:9 aspect ratio (--ar 21:9)
+- Includes Midjourney-specific styling parameters (--v 7, --s values)
+- Follows Midjourney's recommended prompt structure
+
+**Common Features (Both Versions):**
 - Uses character descriptions for visual consistency
 - Color palette guidance based on story timeline and location
 - Professional cinematic prompt engineering
-- Detailed technical photography specifications
+- Time period-appropriate props, clothing, and vehicles
 
 **Output:** Image prompts saved to `text_files/image_prompts/`
 
@@ -130,10 +150,11 @@ python tables_consolidate.py
 ```
 storyboard_gen/
 ├── script2shots.py           # Script → Shot Lists
-├── shots2prompts.py          # Shot Lists → Image Prompts  
-├── table2images.py         # Prompts → Images (TODO)
+├── shots2prompts_IMGN.py     # Shot Lists → Image Prompts (Imagen format)
+├── shots2prompts_MJ.py       # Shot Lists → Image Prompts (Midjourney format)
 ├── prompts2tables.py         # Prompts → CSV Tables
 ├── tables_consolidate.py     # Consolidate CSV Files
+├── table2images.py          # Prompts → Images (TODO)
 ├── text_files/              # Working directory
 │   ├── scripts/             # Input: Film scripts
 │   ├── shot_lists/          # Output: Generated shot lists
@@ -163,11 +184,18 @@ Shot 1B: Medium Shot - Slight push-in
 - Tech notes: 50mm lens, focus on hands making coffee
 ```
 
-### Image Prompt Format
+### Image Prompt Formats
 
+#### Imagen Format (from shots2prompts_IMGN.py)
 ```
 SCENE 1 - SHOT 1A: KITCHEN - MORNING 1999
 Imagen Prompt: "Cinematic wide angle view of a quintessential 1990s kitchen, featuring oak cabinets, subtle patterned linoleum floor, and cereal box on formica countertop. Warm golden morning sunlight streaming through large window, illuminating dust motes. Young woman in oversized flannel shirt enters from left with bright, excited smile. Hyper-realistic film photography, shallow depth of field, warm faded color palette, 35mm film grain, 16:9 aspect ratio."
+```
+
+#### Midjourney Format (from shots2prompts_MJ.py)
+```
+SCENE 1 - SHOT 1A: KITCHEN - MORNING 1999
+Image Prompt: "Cinematic wide angle view of quintessential 1990s kitchen, oak cabinets and linoleum floor, ultra-wide 35mm lens, warm golden morning sunlight streaming through window, dust motes dancing in air, young woman in oversized flannel shirt entering from left with bright smile, hyper-realistic film photography, shallow depth of field, warm faded color palette --ar 21:9 --v 7"
 ```
 
 ### CSV Table Format
