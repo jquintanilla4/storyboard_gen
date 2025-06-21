@@ -182,7 +182,7 @@ def main():
                 'output_file',
                 message="Enter the output CSV file path",
                 path_type=inquirer.Path.FILE,
-                default=str(Path(input_directory) / "prompts_ftable.csv")
+                default=str(Path(input_directory) / "consolidated.csv")
             )
         ]
 
@@ -191,7 +191,7 @@ def main():
             print("Operation cancelled.")
             return 1
 
-            output_file = output_file_answers['output_file']
+        output_file = output_file_answers['output_file']
 
     # Perform consolidation
     try:
