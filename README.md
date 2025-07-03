@@ -123,10 +123,12 @@ Convert image prompts into organized CSV tables:
 python prompts2tables.py
 ```
 
-**Features:**
-- Parses multiple prompt files simultaneously
+-**Features:**
+- Option to process prompt files individually or in pairs (helps stay under the API token limit)
 - Extracts scene, shot, and prompt data
 - Outputs clean CSV format for easy management
+
+Processing files individually is recommended for very large directories to keep each request under Gemini's ~32k token limit (around 100-115 shots).
 
 **Output:** CSV tables saved to `text_files/image_prompts_tables/`
 

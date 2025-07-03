@@ -255,10 +255,102 @@ def process_prompt_files_to_csv(client, prompt_file_paths, output_dir):
             with open(output_path, 'r', encoding='utf-8') as f:
                 row_count = sum(1 for line in f) - 1  # Subtract header row
             print(f"Total prompts extracted: {row_count}")
-        except:
+        except Exception:
             pass
     else:
         logger.error("Failed to create CSV table")
+
+
+def process_prompt_files_individually(client, prompt_file_paths, output_dir):
+    """Process each prompt file individually and create separate CSV tables.
+
+    Each file is sent to Gemini on its own so that the request stays well
+    under the model's ~32k token response limit (roughly 100-115 shots).
+    This method is the most robust for very large directories because no
+    prompt file is ever combined with another.
+    """
+    if not output_dir.exists():
+        output_dir.mkdir(parents=True, exist_ok=True)
+        logger.info(f"Created output directory: {output_dir}")
+
+    # Sort files using natural ordering for consistency
+    sorted_files = sorted(prompt_file_paths, key=lambda x: natural_sort_key(x.name))
+
+    for prompt_file_path in sorted_files:
+        if not prompt_file_path.exists() or prompt_file_path.suffix.lower() != '.txt':
+            logger.warning(f"Skipping invalid file: {prompt_file_path}")
+            continue
+
+        logger.info(f"Processing {prompt_file_path.name} individually")
+
+        file_content = read_prompt_file(prompt_file_path)
+        if not file_content:
+            logger.warning(f"Empty or unreadable prompt file: {prompt_file_path}")
+            continue
+
+        structured_output = parse_prompts(client, file_content)
+        if not structured_output or structured_output.startswith("Error"):
+            logger.error(f"Failed to parse {prompt_file_path.name}")
+            print(f"Error processing {prompt_file_path.name}: {structured_output}")
+            continue
+
+        output_filename = f"{prompt_file_path.stem}_prompts_table.csv"
+        output_path = output_dir / output_filename
+
+        if parse_markdown_table_to_csv(structured_output, output_path):
+            print(f"Created CSV: {output_path.name}")
+        else:
+            logger.error(f"Failed to create CSV for {prompt_file_path.name}")
+
+
+def process_prompt_files_in_pairs(client, prompt_file_paths, output_dir):
+    """Process prompt files two at a time and create separate CSV tables.
+
+    Two files are concatenated and parsed in a single Gemini request. This
+    reduces the number of API calls when dealing with many small files while
+    still helping to keep each request under the token limit.
+    """
+    if not output_dir.exists():
+        output_dir.mkdir(parents=True, exist_ok=True)
+        logger.info(f"Created output directory: {output_dir}")
+
+    sorted_files = sorted(prompt_file_paths, key=lambda x: natural_sort_key(x.name))
+
+    pair_num = 1
+    for i in range(0, len(sorted_files), 2):
+        pair_files = [f for f in sorted_files[i:i+2] if f.exists() and f.suffix.lower() == '.txt']
+        if not pair_files:
+            continue
+
+        names = ', '.join(f.name for f in pair_files)
+        logger.info(f"Processing pair {pair_num}: {names}")
+
+        combined_content = concatenate_prompt_files(pair_files)
+        if not combined_content:
+            logger.warning(f"Skipping pair {pair_num} due to empty content")
+            pair_num += 1
+            continue
+
+        structured_output = parse_prompts(client, combined_content)
+        if not structured_output or structured_output.startswith("Error"):
+            logger.error(f"Failed to parse pair {pair_num}")
+            print(f"Error processing pair {pair_num}: {structured_output}")
+            pair_num += 1
+            continue
+
+        if len(pair_files) == 1:
+            fname = f"{pair_files[0].stem}"
+        else:
+            fname = f"{pair_files[0].stem}_{pair_files[1].stem}"
+        output_filename = f"{fname}_prompts_table.csv"
+        output_path = output_dir / output_filename
+
+        if parse_markdown_table_to_csv(structured_output, output_path):
+            print(f"Created CSV: {output_path.name}")
+        else:
+            logger.error(f"Failed to create CSV for pair {pair_num}")
+
+        pair_num += 1
 
 
 def natural_sort_key(text):
@@ -394,6 +486,26 @@ def main():
             print(f"  {i}. {file_path.name}")
         print("\n")
 
+        process_choice = 'individual'
+        # Offer a choice between processing files individually or in
+        # two-file batches. Individual mode avoids token limit issues
+        # with large directories, while pair mode can reduce the number
+        # of API requests for smaller datasets.
+        if input_path.is_dir() and len(prompt_files) > 1:
+            mode_question = [
+                inquirer.List(
+                    'mode',
+                    message="Process prompt files individually or in pairs?",
+                    choices=['individual', 'pairs'],
+                    default='individual'
+                )
+            ]
+            answers = inquirer.prompt(mode_question)
+            if not answers:
+                print("Operation cancelled.")
+                sys.exit(0)
+            process_choice = answers['mode']
+
         # Get API key if needed
         api_key = get_api_key_if_needed()
 
@@ -421,15 +533,14 @@ def main():
                     f"Error: Could not create output directory {output_dir}: {e}")
                 sys.exit(1)
 
-        print(f"Processing prompt files and creating CSV table...")
-        process_prompt_files_to_csv(client, prompt_files, output_dir)
+        if process_choice == 'pairs':
+            print("\nProcessing prompt files in pairs...")
+            process_prompt_files_in_pairs(client, prompt_files, output_dir)
+        else:
+            print("\nProcessing prompt files individually...")
+            process_prompt_files_individually(client, prompt_files, output_dir)
 
         print(f"\nOutput saved to: {output_dir.absolute()}")
-
-        # Show output file
-        output_file = output_dir / "prompts_table.csv"
-        if output_file.exists():
-            print(f"Generated CSV file: {output_file.name}")
 
     except KeyboardInterrupt:
         print("\n\nOperation cancelled by user.")
